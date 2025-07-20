@@ -20,7 +20,7 @@ describe('POST /api/v1/auth/signin', () => {
       .send(signinValid.TC001);
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('token');
-    expect(res.body.user.email).toBe(signinValid.TC001.email.toLowerCase());
+    expect(res.body.user.email.value).toBe(signinValid.TC001.email.toLowerCase());
   });
 
   it('TC002 – ✅ Email with uppercase letters', async () => {
@@ -29,7 +29,7 @@ describe('POST /api/v1/auth/signin', () => {
       .send(signinValid.TC002);
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('token');
-    expect(res.body.user.email).toBe(signinValid.TC002.email.toLowerCase());
+    expect(res.body.user.email.value).toBe(signinValid.TC002.email.toLowerCase());
   });
 
   it('TC101 – ❌ Missing email', async () => {
@@ -37,7 +37,7 @@ describe('POST /api/v1/auth/signin', () => {
       .post('/api/v1/auth/signin')
       .send(signinInvalid.TC101);
     expect(res.statusCode).toBe(400);
-    expect(res.body.errors).toHaveProperty('email');
+    expect(res.body.errors).toHaveProperty('fieldErrors.email');
   });
 
   it('TC102 – ❌ Missing password', async () => {
@@ -45,7 +45,7 @@ describe('POST /api/v1/auth/signin', () => {
       .post('/api/v1/auth/signin')
       .send(signinInvalid.TC102);
     expect(res.statusCode).toBe(400);
-    expect(res.body.errors).toHaveProperty('password');
+    expect(res.body.errors).toHaveProperty('fieldErrors.password');
   });
 
   it('TC103 – ❌ Invalid email format', async () => {
@@ -53,7 +53,7 @@ describe('POST /api/v1/auth/signin', () => {
       .post('/api/v1/auth/signin')
       .send(signinInvalid.TC103);
     expect(res.statusCode).toBe(400);
-    expect(res.body.errors).toHaveProperty('email');
+    expect(res.body.errors).toHaveProperty('fieldErrors.email');
   });
 
   it('TC104 – ❌ Incorrect password', async () => {

@@ -3,54 +3,51 @@ version: '3.8'
 services:
   postgres:
     image: postgres:15
-    container_name: t3-skeleton-postgres
+    container_name: light-salt-postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: t3_skeleton
+      POSTGRES_DB: light_salt_db
     ports:
       - "5434:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  backend:
+  api:
     build:
-      context: ./backend
+      context: ./apps/api
       target: development
-    container_name: t3-skeleton-backend
+    container_name: light-salt-api
     ports:
       - "5000:5000"
     volumes:
-      - ./backend:/app
+      - ./apps/api:/app
       - /app/node_modules
     environment:
       NODE_ENV: development
       PORT: 5000
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/t3_skeleton
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/light_salt_db
       FRONTEND_URL: http://localhost:8080
     depends_on:
       - postgres
 
-
-  # Frontend (Vite Dev Server)
-  frontend:
+  web:
     image: node:20-alpine
-    container_name: t3-skeleton-frontend
+    container_name: light-salt-web
     working_dir: /app
     command: sh -c "npm install && npm run dev -- --host"
     ports:
       - "8080:8080"
     volumes:
-      - ./frontend:/app
+      - ./apps/web:/app
       - /app/node_modules
     environment:
       VITE_API_URL: http://localhost:5000/api/v1
       VITE_PORT: 8080
-      VITE_APP_NAME: T3 Skeleton Frontend
+      VITE_APP_NAME: Light & Salt Marketplace
     depends_on:
-      - backend
-
+      - api
 
 volumes:
   pgdata:

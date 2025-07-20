@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@domain/*": ["../domain/*"],
+      "@application/*": ["../application/*"],
+      "@infrastructure/*": ["../infrastructure/*"],
+      "@config/*": ["../config/*"],
+      "@services/*": ["../services/src/*"]
+    }
+  }
+}

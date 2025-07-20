@@ -3,11 +3,18 @@
   "version": "1.0.0",
   "description": "Full-stack T3 boilerplate with PostgreSQL, Express, React (Vite), and TypeScript",
   "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint \"./{frontend,backend}/**/*.{ts,tsx}\"",
     "format": "prettier --write \"./{frontend,backend}/**/*.{ts,tsx,js,jsx,json,md}\"",
-    "prepare": "chmod +x .husky/pre-commit"
+    "prepare": "chmod +x .husky/pre-commit",
+    "dev:api": "npm --workspace=apps/api run dev",
+    "dev:web": "npm --workspace=apps/web run dev"
   },
   "repository": {
     "type": "git",
@@ -23,6 +30,7 @@
   "homepage": "https://github.com/thapelomagqazana/t3-skeleton#readme",
   "devDependencies": {
     "@eslint/js": "^9.31.0",
+    "@types/bcrypt": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^8.36.0",
     "@typescript-eslint/parser": "^8.36.0",
     "eslint": "^9.31.0",
@@ -45,5 +53,12 @@
     "*.{json,md}": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "react-router-dom": "^6.30.1"
+  },
+  "prisma": {
+    "schema": "packages/infrastructure/prisma/schema.prisma"
   }
 }

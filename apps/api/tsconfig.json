@@ -119,7 +119,8 @@
       "@application/*": ["../../packages/application/*"],
       "@domain/*": ["../../packages/domain/*"],
       "@infrastructure/*": ["../../packages/infrastructure/*"],
-      "@services/*": ["../../packages/services/src/*"]
+      "@services/*": ["../../packages/services/src/*"],
+      "@interfaces/*": ["../../packages/interfaces/*"]
     }
   },
   "include": [
@@ -131,6 +132,7 @@
     { "path": "../../packages/domain" },
     { "path": "../../packages/application" },
     { "path": "../../packages/infrastructure" },
-    { "path": "../../packages/services" }
+    { "path": "../../packages/services" },
+    { "path": "../../packages/interfaces" },
   ]
 }

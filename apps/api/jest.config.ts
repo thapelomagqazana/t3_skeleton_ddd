@@ -16,6 +16,7 @@ const config: Config = {
     '^@infrastructure/(.*)$': '<rootDir>/../../packages/infrastructure/$1',
     '^@domain/(.*)$': '<rootDir>/../../packages/domain/$1',
     '^@services/(.*)$': '<rootDir>/../../packages/services/src/$1',
+    '^@interfaces/(.*)$': '<rootDir>/../../packages/interfaces/$1',
   },
   globals: {
     'ts-jest': {

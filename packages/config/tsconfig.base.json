@@ -12,7 +12,8 @@
       "@application/*": ["../application/*"],
       "@infrastructure/*": ["../infrastructure/*"],
       "@config/*": ["../config/*"],
-      "@services/*": ["../services/src/*"]
+      "@services/*": ["../services/src/*"],
+      "@interfaces/*": ["../interfaces/*"],
     }
   }
 }

@@ -121,11 +121,13 @@
       "@infrastructure/*": ["../../packages/infrastructure/*"],
       "@services/*": ["../../packages/services/src/*"],
       "@interfaces/*": ["../../packages/interfaces/*"]
-    }
+    },
+    
   },
   "include": [
     "src/**/*",
-    "tests/**/*"
+    "tests/**/*",
+    "../../packages/interfaces/http/types"
   ],
   "exclude": ["node_modules"],
   "references": [

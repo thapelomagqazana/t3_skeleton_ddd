@@ -1,20 +1,21 @@
 import prisma from '../../src/db';
 import bcrypt from 'bcryptjs';
 import { Role } from '@prisma/client';
+import { Email } from '@domain/valueObjects/Email';
 
 const TEST_USER_EMAILS = [
   'john@example.com',
-  'jane@example.com', // normalized lowercase
+  'jane@example.com',
   'test@example.com',
   'short@example.com',
-  'notanemail',
+  // 'notanemail',           // ❌ invalid
   'existing@example.com',
   'a@example.com',
   'edge@example.com',
   'spe@cial.com',
   'trim@example.com',
   'long@example.com',
-  "' OR 1=1--",
+  // "' OR 1=1--",           // ❌ invalid SQL injection test
   'safe@example.com',
   'admin@example.com', 
   'user@example.com',
@@ -26,15 +27,27 @@ const TEST_USER_EMAILS = [
   'hard@example.com',
 ];
 
+
 export const clearTestUsers = async () => {
   await prisma.user.deleteMany({
     where: {
-      email: {
-        in: TEST_USER_EMAILS.map(email => email.toLowerCase()),
-      },
+      OR: [
+        {
+          email: {
+            in: TEST_USER_EMAILS.map(email => email.toLowerCase()),
+          },
+        },
+        {
+          email: '',
+        },
+        {
+          email: "' OR 1=1--",
+        },
+      ],
     },
   });
 };
+
 
 export const seedUser = async (email = 'existing@example.com', password = 'secret123') => {
   const hashedPassword =
@@ -88,3 +101,13 @@ export async function softDeleteUserById(userId: string) {
     },
   });
 }
+
+export const validateEmails = () => {
+  for (const email of TEST_USER_EMAILS) {
+    try {
+      new Email(email); // your value object
+    } catch (e: any) {
+      console.error(`Invalid test email: "${email}" →`, e.message);
+    }
+  }
+};

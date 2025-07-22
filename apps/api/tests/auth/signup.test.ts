@@ -17,14 +17,14 @@ describe('POST /api/v1/auth/signup', () => {
     const res = await request(app).post('/api/v1/auth/signup').send(validUsers.TC001);
     expect(res.statusCode).toBe(201);
     expect(res.body).toHaveProperty('token');
-    expect(res.body.user.name).toBe(validUsers.TC001.name);
-    expect(res.body.user.email.value).toBe(validUsers.TC001.email);
+    expect(res.body.user._name).toBe(validUsers.TC001.name);
+    expect(res.body.user._email.value).toBe(validUsers.TC001.email);
   });
 
   it('TC002 – ✅ Email with uppercase letters (normalized)', async () => {
     const res = await request(app).post('/api/v1/auth/signup').send(validUsers.TC002);
     expect(res.statusCode).toBe(201);
-    expect(res.body.user.email.value).toBe(validUsers.TC002.email.toLowerCase());
+    expect(res.body.user._email.value).toBe(validUsers.TC002.email.toLowerCase());
   });
 
   it('TC101 – ❌ Missing name', async () => {
@@ -70,7 +70,7 @@ describe('POST /api/v1/auth/signup', () => {
   it('TC201 – ⚠️ Name with 2 character', async () => {
     const res = await request(app).post('/api/v1/auth/signup').send(edgeUsers.TC201);
     expect(res.statusCode).toBe(201);
-    expect(res.body.user.name).toBe(edgeUsers.TC201.name);
+    expect(res.body.user._name).toBe(edgeUsers.TC201.name);
   });
 
   it('TC202 – ⚠️ Password exactly at minimum length (6 chars)', async () => {
@@ -86,8 +86,8 @@ describe('POST /api/v1/auth/signup', () => {
   it('TC204 – ⚠️ Leading/trailing spaces in email or name', async () => {
     const res = await request(app).post('/api/v1/auth/signup').send(edgeUsers.TC204);
     expect(res.statusCode).toBe(201);
-    expect(res.body.user.name).toBe(edgeUsers.TC204.name.trim());
-    expect(res.body.user.email.value).toBe(edgeUsers.TC204.email.trim().toLowerCase());
+    expect(res.body.user._name).toBe(edgeUsers.TC204.name.trim());
+    expect(res.body.user._email.value).toBe(edgeUsers.TC204.email.trim().toLowerCase());
   });
 
   // 🔍 CORNER TEST CASES
@@ -115,6 +115,6 @@ describe('POST /api/v1/auth/signup', () => {
   it('TC305 – 🔍 JavaScript injection in name', async () => {
     const res = await request(app).post('/api/v1/auth/signup').send(cornerUsers.TC305);
     expect(res.statusCode).toBe(201);
-    expect(res.body.user.name).toContain('<script>');
+    expect(res.body.user._name).toContain('<script>');
   });
 });

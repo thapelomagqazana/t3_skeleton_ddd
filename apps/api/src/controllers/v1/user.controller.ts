@@ -5,12 +5,12 @@ import { GetUser } from '@application/user/useCases/getUser';
 import { UpdateUser } from '@application/user/useCases/updateUser';
 import { DeleteUser } from '@application/user/useCases/deleteUser';
 import { Role } from '@prisma/client';
-import { User } from '@domain/user/entities/User';
-import z from 'zod';
+import { Email } from '@domain/valueObjects/Email';
+import { userIdSchema, updateUserSchema } from '@application/user/validators/userSchema';
 
 const repo = new UserRepository();
 // UUID v4 validation schema
-const userIdSchema = z.string().uuid();
+
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
@@ -50,7 +50,6 @@ export const getUsers = async (req: Request, res: Response) => {
 export const getUserById = async (req: Request, res: Response) => {
   try {
     const currentUser = req.user;
-    console.log(currentUser);
     const rawId = req.params.id?.trim();
 
     // Validate UUID format
@@ -81,15 +80,87 @@ export const getUserById = async (req: Request, res: Response) => {
   }
 };
 
+
 export const updateUser = async (req: Request, res: Response) => {
   const useCase = new UpdateUser(repo);
-  const user = new User(req.params.id, req.body.name, req.body.email, req.body.password, req.body.role);
-  const updated = await useCase.execute(user);
-  res.status(200).json(updated);
+
+  try {
+    const rawId = req.params.id?.trim();
+
+    // Validate UUID format
+    const idResult = userIdSchema.safeParse(rawId);
+    if (!idResult.success) {
+      return res.status(400).json({ error: 'Invalid user ID format' });
+    }
+    const id = idResult.data;
+
+    // Validate request body
+    const bodyResult = updateUserSchema.safeParse(req.body);
+    if (!bodyResult.success) {
+      return res.status(400).json({ errors: bodyResult.error.issues });
+    }
+
+    // Transform & hydrate domain object
+    const { name, email, role, isActive } = bodyResult.data;
+    const updatePayload: any = {};
+    if (name) updatePayload.name = name.trim();
+    if (email) updatePayload.email = new Email(email); // domain VO
+    if (role) updatePayload.role = role;
+    if (isActive !== undefined) updatePayload.isActive = isActive;
+
+    // Only allow self-update or admin
+    const currentUser = req.user!;
+    if (currentUser.role !== Role.ADMIN && currentUser.userId !== id) {
+      return res.status(403).json({ error: 'Forbidden: Cannot update another user' });
+    }
+
+    // Run use case
+    const result = await useCase.execute(id, updatePayload);
+    if (!result) {
+      return res.status(400).json({ error: 'User update failed or user not found' });
+    }
+
+    return res.status(200).json({ user: result });
+  } catch (err: any) {
+    console.error(err);
+    return res.status(500).json({ error: 'Server error during user update' });
+  }
 };
 
 export const deleteUser = async (req: Request, res: Response) => {
-  const useCase = new DeleteUser(repo);
-  await useCase.execute(req.params.id);
-  res.status(204).send();
+  try {
+    const id = req.params.id?.trim();
+
+    // Validate ID
+    const parseResult = userIdSchema.safeParse(id);
+    if (!parseResult.success) {
+      return res.status(400).json({ error: 'Invalid user ID format' });
+    }
+
+    const currentUser = req.user!;
+    const isAdmin = currentUser.role === 'ADMIN';
+    const isSelf = currentUser.userId === id;
+
+    if (!isAdmin && !isSelf) {
+      return res.status(403).json({ error: 'Forbidden: You cannot delete another user' });
+    }
+
+    const useCase = new DeleteUser(repo);
+    const result = await useCase.execute(id);
+
+    if (result === false) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (result === 'alreadyDeleted') {
+      return res.status(410).json({ error: 'User already deleted' });
+    }
+
+    // You can adjust the message depending on soft or hard delete
+    return res.status(200).json({ message: 'User deleted successfully' });
+  } catch (err: any) {
+    console.error(err);
+    return res.status(500).json({ error: 'Server error during user deletion' });
+  }
 };
+

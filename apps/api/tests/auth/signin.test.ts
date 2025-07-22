@@ -20,7 +20,7 @@ describe('POST /api/v1/auth/signin', () => {
       .send(signinValid.TC001);
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('token');
-    expect(res.body.user.email.value).toBe(signinValid.TC001.email.toLowerCase());
+    expect(res.body.user._email.value).toBe(signinValid.TC001.email.toLowerCase());
   });
 
   it('TC002 – ✅ Email with uppercase letters', async () => {
@@ -29,7 +29,7 @@ describe('POST /api/v1/auth/signin', () => {
       .send(signinValid.TC002);
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('token');
-    expect(res.body.user.email.value).toBe(signinValid.TC002.email.toLowerCase());
+    expect(res.body.user._email.value).toBe(signinValid.TC002.email.toLowerCase());
   });
 
   it('TC101 – ❌ Missing email', async () => {

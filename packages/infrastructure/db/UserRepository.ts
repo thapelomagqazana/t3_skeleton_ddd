@@ -100,10 +100,19 @@ export class UserRepository implements IUserRepository {
     return UserMapper.toDomain(updated);
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: string): Promise<false | 'alreadyDeleted' | 'deleted'> {
+    const user = await prisma.user.findUnique({ where: { id } });
+
+    if (!user) return false;
+    if (!user.isActive) return 'alreadyDeleted';
+
     await prisma.user.update({
-      where: { id },
-      data: { isActive: false }
+        where: { id },
+        data: { isActive: false },
     });
+
+    return 'deleted';
   }
+
+
 }

@@ -32,7 +32,7 @@ describe('GET /api/v1/users/:id', () => {
       .set('Authorization', `Bearer ${adminToken}`);
 
     expect(res.statusCode).toBe(200);
-    expect(res.body.user).toHaveProperty('id', otherUser.id);
+    expect(res.body.user).toHaveProperty('_id', otherUser.id);
   });
 
   it('TC002 – ✅ Valid user ID (self-access)', async () => {
@@ -40,7 +40,7 @@ describe('GET /api/v1/users/:id', () => {
       .get(`/api/v1/users/${normalUser.id}`)
       .set('Authorization', `Bearer ${userToken}`);
     expect(res.statusCode).toBe(200);
-    expect(res.body.user).toHaveProperty('id', normalUser.id);
+    expect(res.body.user).toHaveProperty('_id', normalUser.id);
   });
 
   // ❌ Negative Tests

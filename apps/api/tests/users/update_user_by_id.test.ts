@@ -32,7 +32,7 @@ describe('PUT /api/v1/users/:id', () => {
       .send({ name: 'Updated Name' });
 
     expect(res.statusCode).toBe(200);
-    expect(res.body.user.name).toBe('Updated Name');
+    expect(res.body.user._name).toBe('Updated Name');
   });
 
   it('TC002 – ✅ User updates their own profile', async () => {
@@ -42,7 +42,7 @@ describe('PUT /api/v1/users/:id', () => {
       .send({ name: 'Self Edit' });
 
     expect(res.statusCode).toBe(200);
-    expect(res.body.user.name).toBe('Self Edit');
+    expect(res.body.user._name).toBe('Self Edit');
   });
 
   it('TC003 – ✅ Update multiple fields at once', async () => {
@@ -55,8 +55,8 @@ describe('PUT /api/v1/users/:id', () => {
         isActive: true,
       });
     expect(res.statusCode).toBe(200);
-    expect(res.body.user.email).toBe('multifield@example.com');
-    expect(res.body.user.name).toBe('Multi Field');
+    expect(res.body.user._email.value).toBe('multifield@example.com');
+    expect(res.body.user._name).toBe('Multi Field');
   });
 
   it('TC004 – ✅ Valid update with trimmed fields', async () => {
@@ -66,7 +66,7 @@ describe('PUT /api/v1/users/:id', () => {
       .send({ name: '   John Doe   ' });
 
     expect(res.statusCode).toBe(200);
-    expect(res.body.user.name).toBe('John Doe');
+    expect(res.body.user._name).toBe('John Doe');
   });
 
   // ❌ Negative Test Cases

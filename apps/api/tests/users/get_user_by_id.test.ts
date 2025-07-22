@@ -39,7 +39,6 @@ describe('GET /api/v1/users/:id', () => {
     const res = await request(app)
       .get(`/api/v1/users/${normalUser.id}`)
       .set('Authorization', `Bearer ${userToken}`);
-
     expect(res.statusCode).toBe(200);
     expect(res.body.user).toHaveProperty('id', normalUser.id);
   });

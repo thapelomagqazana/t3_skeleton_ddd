@@ -1,9 +1,13 @@
-import { User } from '@domain/user/entities/User';
+import { Role } from '@prisma/client';
 
 declare global {
   namespace Express {
     interface Request {
-      user?: User; // or a token payload type if using JWT
+      user?: {
+        userId: string;
+        role: Role;
+        email?: string;
+      };
     }
   }
 }

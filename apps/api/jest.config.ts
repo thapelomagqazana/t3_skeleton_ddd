@@ -12,11 +12,11 @@ const config: Config = {
   testMatch: ['<rootDir>/tests/**/*.test.ts'],
   moduleFileExtensions: ['ts', 'js', 'json'],
   moduleNameMapper: {
-    '^@application/(.*)$': '<rootDir>/../../packages/application/$1',
-    '^@infrastructure/(.*)$': '<rootDir>/../../packages/infrastructure/$1',
-    '^@domain/(.*)$': '<rootDir>/../../packages/domain/$1',
+    '^@application/(.*)$': '<rootDir>/../../packages/application/src/$1',
+    '^@infrastructure/(.*)$': '<rootDir>/../../packages/infrastructure/src/$1',
+    '^@domain/(.*)$': '<rootDir>/../../packages/domain/src/$1',
     '^@services/(.*)$': '<rootDir>/../../packages/services/src/$1',
-    '^@interfaces/(.*)$': '<rootDir>/../../packages/interfaces/$1',
+    '^@interfaces/(.*)$': '<rootDir>/../../packages/interfaces/src/$1',
   },
   globals: {
     'ts-jest': {

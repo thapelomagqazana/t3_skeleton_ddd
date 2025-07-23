@@ -1,13 +1,13 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.json", // Use the shared base config, not the root tsconfig.json
   "compilerOptions": {
     "composite": true,
     "declaration": true,
     "declarationMap": true,
-    "rootDir": "./",
+    "rootDir": "src",      // More explicit and clean project structure
     "outDir": "dist"
   },
-  "include": ["**/*"],
+  "include": ["src/**/*"],
   "references": [
     { "path": "../domain" },
     { "path": "../services" }

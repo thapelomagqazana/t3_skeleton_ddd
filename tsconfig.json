@@ -9,5 +9,16 @@
     { "path": "./packages/infrastructure" },
     { "path": "./packages/config" },
     { "path": "./packages/interfaces" }
-  ]
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@domain/*": ["packages/domain/src/*"],
+      "@application/*": ["packages/application/src/*"],
+      "@infrastructure/*": ["packages/infrastructure/src/*"],
+      "@interfaces/*": ["packages/interfaces/src/*"],
+      "@config/*": ["packages/config/src/*"],
+      "@services/*": ["packages/services/src/*"]
+    }
+  }
 }

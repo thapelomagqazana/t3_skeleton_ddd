@@ -2,12 +2,16 @@
   "extends": "../config/tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "./",
-    "composite": true
+    "rootDir": "src",
+    "composite": true,
+    "baseUrl": "./src"
   },
   "references": [
     { "path": "../domain" }
   ],
-  "include": ["**/*.ts"],
+  "include": [
+    "src/**/*",
+    "src/types/express/index.d.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

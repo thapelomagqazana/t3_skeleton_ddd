@@ -81,7 +81,7 @@ jobs:
       - name: 📦 Build & Push Backend Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: ./apps/api
+          context: . # root of the monorepo
           file: ./apps/api/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/t3-backend-ddd:latest
@@ -89,7 +89,7 @@ jobs:
       - name: 📦 Build & Push Frontend Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: ./apps/web
+          context: . # root of the monorepo
           file: ./apps/web/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/t3-frontend-ddd:latest

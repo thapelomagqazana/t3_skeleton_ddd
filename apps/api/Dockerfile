@@ -49,10 +49,13 @@ ENV NODE_ENV=production
 # Copy runtime deps
 COPY --from=deps /app/node_modules ./node_modules
 
-# Copy source files and Prisma schema
+# Copy app code
 COPY . .
 
-# Generate Prisma client for production
+# Ensure Prisma schema path exists in image
+COPY packages/infrastructure/src/prisma ./packages/infrastructure/src/prisma
+
+# Generate Prisma client
 RUN npx prisma generate
 
 EXPOSE 5000

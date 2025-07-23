@@ -3,7 +3,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:15
-    container_name: light-salt-postgres
+    container_name: t3-skeleton-postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -18,7 +18,7 @@ services:
     build:
       context: ./apps/api
       target: development
-    container_name: light-salt-api
+    container_name: t3-skeleton-api
     ports:
       - "5000:5000"
     volumes:
@@ -27,7 +27,7 @@ services:
     environment:
       NODE_ENV: development
       PORT: 5000
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/light_salt_db
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5434/t3_skeleton_db
       FRONTEND_URL: http://localhost:8080
     depends_on:
       - postgres
@@ -45,7 +45,7 @@ services:
     environment:
       VITE_API_URL: http://localhost:5000/api/v1
       VITE_PORT: 8080
-      VITE_APP_NAME: Light & Salt Marketplace
+      VITE_APP_NAME: t3 skeleton
     depends_on:
       - api
 

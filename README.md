@@ -9,7 +9,7 @@ A modern, scalable full-stack starter built using **Domain-Driven Design (DDD)**
 - **Frontend**: React + Vite + TypeScript + Tailwind CSS
 - **Backend**: Node.js + Express + TypeScript
 - **Database**: PostgreSQL + Prisma
-- **Tooling**: TurboRepo + tsup + Docker + ESLint + Prettier + dotenv
+- **Tooling**: Docker + ESLint + Prettier + dotenv
 - **Testing**: Jest (unit), Cypress (e2e)
 
 ---

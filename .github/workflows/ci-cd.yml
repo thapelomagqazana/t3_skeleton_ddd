@@ -10,7 +10,6 @@ env:
   DATABASE_URL: postgresql://postgres:postgres@localhost:5432/t3_skeleton_db_dd
   JWT_SECRET: dummysecretforCI
   VITE_API_URL: http://localhost:5000/api/v1
-  NODE_ENV: production
 
 jobs:
   build-test:
@@ -54,7 +53,7 @@ jobs:
 
       - name: ✅ Run Backend Tests
         working-directory: apps/api
-        run: npm run test || echo "No tests yet"
+        run: npm test || echo "No tests yet"
 
       - name: 🧪 Build Frontend
         working-directory: apps/web

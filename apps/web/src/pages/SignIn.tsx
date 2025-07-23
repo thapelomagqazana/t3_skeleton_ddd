@@ -37,7 +37,13 @@ export default function SignIn() {
       });
 
       if (response.token && response.user) {
-        signin({ token: response.token, user: response.user });
+        const normalizedUser = {
+          id: response.user._id,
+          name: response.user._name,
+          email: response.user._email.value, // fix here
+          role: response.user._role,
+        };
+        signin({ token: response.token, user: normalizedUser });
         toast.success('Signed in successfully');
       } else {
         toast.error(response.error || 'Invalid credentials. Please try again.');

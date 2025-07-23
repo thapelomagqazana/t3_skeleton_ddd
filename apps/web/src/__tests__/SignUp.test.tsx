@@ -137,7 +137,7 @@ describe('SignUp Page', () => {
     fireEvent.click(screen.getByRole('button', { name: /create account/i }));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('An error occurred during signup.');
+      expect(toast.error).toHaveBeenCalledWith("Something went wrong");
     });
   });
 });

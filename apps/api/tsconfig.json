@@ -12,14 +12,14 @@
     "types": ["jest", "node"],
     "typeRoots": [
       "../../node_modules/@types",
-      "../../packages/interfaces/src/types"
+      "../../packages/interfaces/src/http/types"
     ]
   },
   "include": [
     "src/**/*",
     "tests/**/*",
     "src/types-global.d.ts",
-    "../../packages/interfaces/src/types/express/index.d.ts"
+    "../../packages/interfaces/src/http/types/express/index.d.ts"
   ],
   "exclude": ["node_modules"],
   "references": [

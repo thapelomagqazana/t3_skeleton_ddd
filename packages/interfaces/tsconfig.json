@@ -11,7 +11,7 @@
   ],
   "include": [
     "src/**/*",
-    "src/types/express/index.d.ts"
+    "src/http/types/express/index.d.ts"
   ],
   "exclude": ["node_modules", "dist"]
 }

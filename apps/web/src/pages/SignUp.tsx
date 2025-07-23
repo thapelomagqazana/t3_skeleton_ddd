@@ -33,7 +33,13 @@ export default function SignUp() {
     try {
       const res = await signUp(data);
       if (res.token && res.user) {
-        signin({ token: res.token, user: res.user });
+        const normalizedUser = {
+          id: res.user._id,
+          name: res.user._name,
+          email: res.user._email.value, // fix here
+          role: res.user._role,
+        };
+        signin({ token: res.token, user: normalizedUser });
         toast.success('Signed up successfully!');
       } else {
         toast.error(res.error || 'Signup failed.');

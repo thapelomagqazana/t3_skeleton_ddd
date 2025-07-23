@@ -9,12 +9,14 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint \"./{frontend,backend}/**/*.{ts,tsx}\"",
-    "format": "prettier --write \"./{frontend,backend}/**/*.{ts,tsx,js,jsx,json,md}\"",
-    "prepare": "chmod +x .husky/pre-commit",
-    "dev:api": "npm --workspace=apps/api run dev",
-    "dev:web": "npm --workspace=apps/web run dev"
+    "dev": "concurrently \"npm run dev -w apps/api\" \"npm run dev -w apps/web\"",
+    "build": "npm run build -w apps/api && npm run build -w apps/web",
+    "lint": "eslint \"**/*.{ts,tsx,js,jsx}\" --ignore-path .gitignore",
+    "test:api": "npm run test --workspace=apps/api",
+    "test:web": "npm run test --workspace=apps/web",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "db:studio": "npm --workspace=apps/api run db:studio",
+     "db:migrate": "prisma migrate dev --schema=../../packages/infrastructure/src/prisma/schema.prisma --env-file=../../.env"
   },
   "repository": {
     "type": "git",
@@ -35,6 +37,7 @@
     "@types/node": "^24.0.15",
     "@typescript-eslint/eslint-plugin": "^8.36.0",
     "@typescript-eslint/parser": "^8.36.0",
+    "concurrently": "^9.2.0",
     "eslint": "^9.31.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-import": "^2.32.0",
@@ -43,7 +46,6 @@
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
     "prettier": "^3.6.2"
   },

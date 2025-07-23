@@ -25,6 +25,7 @@ const TEST_USER_EMAILS = [
   'deleted@example.com',
   'soft@example.com',
   'hard@example.com',
+  "signoutuser@example.com",
 ];
 
 

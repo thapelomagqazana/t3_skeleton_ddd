@@ -1,52 +1,85 @@
-# T3 Skeleton — Full Stack Starter Template
+# 🧱 T3 Skeleton — DDD Full Stack Starter Template
 
-A modern full-stack starter template using:
-
-- **Node.js + Express + Prisma** (Backend)
-- **Vite + TypeScript + React** (Frontend)
-- **PostgreSQL** (Database)
-- **Docker Compose** (Dev Environment)
-- **JWT Auth** Ready
+A modern, scalable full-stack starter built using **Domain-Driven Design (DDD)** principles, designed to help you launch TypeScript-based applications with clear separation of concerns and long-term maintainability.
 
 ---
 
-## Project Structure
+## 🚀 Tech Stack
 
-```md
+- **Frontend**: React + Vite + TypeScript + Tailwind CSS
+- **Backend**: Node.js + Express + TypeScript
+- **Database**: PostgreSQL + Prisma
+- **Tooling**: TurboRepo + tsup + Docker + ESLint + Prettier + dotenv
+- **Testing**: Jest (unit), Cypress (e2e)
+
+---
+
+## 📁 Project Structure
+
+```
+
 t3-skeleton/
+├── apps/
+│   ├── api/                      # Express API layer
+│   └── web/                      # React web frontend
 │
-├── frontend/        # React + Vite frontend
-├── backend/         # Express + Prisma backend
-└── docker-compose.yml
+├── packages/
+│   ├── domain/                   # Domain layer: Entities, VOs, Domain Events
+│   ├── application/             # Application layer: UseCases, DTOs, Ports
+│   ├── interfaces/              # Interface layer: Controllers, Routes, Schemas
+│   ├── infrastructure/          # Infrastructure layer: Repositories, Adapters
+│   ├── services/                # Shared services like auth, mailing, etc.
+│   ├── shared/                  # Utilities, types, cross-cutting concerns
+│   └── config/                  # Shared tsconfig, eslint, env, etc. with (tsconfig.base.json and tsconfig.json)
+│
+├── .github/                     # GitHub Actions / CI
+├── .env                         # (Optional) global dotenv
+├── docker-compose.yml           # Local dev containers
+└── tsconfig.json                # Extension of Base TypeScript configuration from config/tsconfig.base.json
 ````
 
----
+## 🧩 Getting Started
 
-## Getting Started (Local Dev with Docker)
-
-### 1. Clone the Repository
+### 1. Clone Template
 
 ```bash
-git clone https://github.com/thapelomagqazana/t3-skeleton.git
-cd t3-skeleton
+npx degit thapelomagqazana/t3-skeleton your-app
+cd your-app
+````
+
+### 2. Install Dependencies
+
+```bash
+npm install
 ```
 
----
+### 3. Environment Setup
 
-### 2. Set Up Environment Variables
+Create `.env` files in the following locations:
 
-Create `.env` files in `backend/` and `frontend/`:
-
-#### `backend/.env`
+#### 🛠️ Backend – `apps/api/.env`
 
 ```env
-DATABASE_URL=postgresql://postgres:postgres@db:5432/t3_skeleton
-JWT_SECRET=your_super_secret_key
+# Docker-based PostgreSQL connection (use service name `postgres` as host)
+DATABASE_URL=postgresql://postgres:postgres@localhost:5434/t3_skeleton_db
+
+# Frontend URL for CORS
+FRONTEND_URL=http://localhost:8080
+
+# JWT Secret for signing tokens
+JWT_SECRET=super_secret_jwt_key
+
+# Port the backend will run on
 PORT=5000
+
+# Node environment
 NODE_ENV=development
+
+# Bcrypt salt rounds
+BCRYPT_SALT=10
 ```
 
-#### `frontend/.env`
+#### 🎨 Frontend – `apps/web/.env`
 
 ```env
 VITE_API_URL=http://localhost:5000/api/v1
@@ -56,125 +89,69 @@ VITE_PORT=8080
 
 ---
 
-### 3. Run the Project
+## ⚙️ Scripts
+
+| Command              | Description                           |
+| -------------------- | ------------------------------------- |
+| `npm run dev`        | Run both frontend and backend locally |
+| `npm run dev --workspace=apps/api` | Run only the Express backend          |
+| `npm run dev --workspace=apps/api` | Run only the React frontend           |
+| `npm run build`      | Build all apps and packages           |
+| `npm run lint`       | Run ESLint                            |
+| `npm run test:api`       | Run Jest against API tests                   |
+| `npm run test:web`       | Run Jest against Web tests                   |
+| `npm run format`     | Format code with Prettier             |
+| `npm run db:studio`  | Open Prisma Studio                    |
+| `npm run db:migrate` | Run Prisma migration                  |
+
+---
+
+## ✅ Testing
+
+### End-to-End Tests
 
 ```bash
-docker-compose up --build
+cd apps/web
+npx cypress open
 ```
 
-This will:
-
-* Start **PostgreSQL**, **backend**, and **frontend** containers
-* Use **volume mounts** for live-reload
-* Open the frontend at [http://localhost:8080](http://localhost:8080)
-
----
-
-### 4. Initialize the Database (Only Once)
-
-In a separate terminal:
+> 💡 On Ubuntu? If Cypress crashes with `SIGSEGV`, install the following:
 
 ```bash
-docker-compose exec backend npx prisma migrate dev --name init
-```
-
----
-
-### 5. Access URLs
-
-| Service     | URL                                                          |
-| ----------- | ------------------------------------------------------------ |
-| Frontend    | [http://localhost:8080](http://localhost:8080)               |
-| Backend API | [http://localhost:5000/api/v1](http://localhost:5000/api/v1) |
-| Database    | `localhost:5434` (outside Docker)                            |
-
----
-
-## Run Tests (Backend)
-
-```bash
-docker-compose exec backend npm run test
+sudo apt install -y libgtk-3-0 libnss3 libasound2t64 libxss1 \
+libatk-bridge2.0-0 libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 \
+libgbm1 libpangocairo-1.0-0 libcairo2 libpango-1.0-0
 ```
 
 ---
 
-## Available Scripts
-
-### Backend
+## 🧼 Clean Up Build Artifacts
 
 ```bash
-npm run dev      # Start backend with Nodemon
-npm run build    # Build backend
-npm run test     # Run tests
+npx tsc --build --clean
 ```
 
-### Frontend
-
-```bash
-npm run dev      # Start Vite dev server
-npm run build    # Build production bundle
-```
+> ✅ Do **not** push `.js` or `.d.ts` files to Git. They are ignored via `.gitignore`.
 
 ---
 
-## API Endpoints
+## 🧠 Philosophy
 
-### Auth Routes
-
-| Method | Endpoint   | Description              | Auth Required |
-| ------ | ---------- | ------------------------ | ------------- |
-| POST   | `/api/v1/auth/signup`  | Register a new user      | ❌ No          |
-| POST   | `/api/v1/auth/signin`  | Sign in an existing user | ❌ No          |
-| POST   | `/api/v1/auth/signout` | Sign out a user          | ✅ Yes         |
+* **DDD**: Clear boundaries between domain, application, infrastructure, and interface layers.
+* **Scalability**: Each package is independently composable and testable.
+* **Modularity**: Add new domains or bounded contexts confidently.
+* **Consistency**: Shared types and configurations reduce bugs and friction.
 
 ---
 
-### User Routes (Protected)
+## 📄 License
 
-| Method | Endpoint            | Description       | Auth Required |
-| ------ | ------------------- | ----------------- | ------------- |
-| GET    | `/api/v1/users`     | Get all users     | ✅ Yes         |
-| GET    | `/api/v1/users/:id` | Get user by ID    | ✅ Yes         |
-| PUT    | `/api/v1/users/:id` | Update user by ID | ✅ Yes         |
-| DELETE | `/api/v1/users/:id` | Delete user by ID | ✅ Yes         |
-
-> All protected routes use **JWT Bearer Auth** in the Authorization header.
+MIT — free to use, modify, and build on.
 
 ---
 
-## Docker Overview
+## 👤 Maintainer
 
-* Uses **bind mounts** for live reload (frontend & backend)
-* Prisma and PostgreSQL preconfigured
-* Easily swappable for **Render**, **Fly.io**, or **Railway** deployment
-
----
-
-## Notes
-
-* Ensure Docker is running
-* Avoid port conflicts (5000 = API, 5434 = DB, 8080 = frontend)
-* `.env` secrets **must not** be committed
-
----
-
-## Future Plans
-
-* CI/CD via GitHub Actions
-* Optional Redis for caching
-* Deploy-ready Dockerfiles for Fly.io / Render / Railway
-
----
-
-## Author
-
-Built by [Thapelo Magqazana](https://www.linkedin.com/in/thapelo-magqazana-90632a174)
-
----
-
-## License
-
-MIT
-
-
+**Thapelo Magqazana**
+GitHub: [@thapelomagqazana](https://github.com/thapelomagqazana)
 

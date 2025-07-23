@@ -8,7 +8,9 @@
     "test:watch": "jest --watch",
     "dev": "ts-node-dev --respawn --transpile-only --require tsconfig-paths/register src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "db:studio": "prisma studio --schema=../../packages/infrastructure/src/prisma/schema.prisma",
+    "db:migrate": "prisma migrate dev --schema=../../packages/infrastructure/src/prisma/schema.prisma"
   },
   "keywords": [],
   "author": "",

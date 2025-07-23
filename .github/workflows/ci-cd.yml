@@ -7,9 +7,9 @@ on:
 
 env:
   NODE_VERSION: 20
-  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/t3_skeleton
+  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/t3_skeleton_db_dd
+  JWT_SECRET: dummysecretforCI
   VITE_API_URL: http://localhost:5000/api/v1
-  JWT_SECRET: dummysecretforCI # can be overridden with secrets if needed
 
 jobs:
   build-test:
@@ -22,7 +22,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: t3_skeleton
+          POSTGRES_DB: t3_skeleton_db_dd
         ports:
           - 5432:5432
         options: >-
@@ -40,28 +40,23 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: 📦 Install Backend Dependencies
-        working-directory: backend
+      - name: 📦 Install Root Dependencies
         run: npm install
 
       - name: ⚙️ Generate Prisma Client
-        working-directory: backend
-        run: npx prisma generate
+        working-directory: apps/api
+        run: npx prisma generate --schema=../../packages/infrastructure/src/prisma/schema.prisma
 
       - name: 🧱 Run Migrations
-        working-directory: backend
-        run: npx prisma migrate deploy
+        working-directory: apps/api
+        run: npx prisma migrate deploy --schema=../../packages/infrastructure/src/prisma/schema.prisma
 
       - name: ✅ Run Backend Tests
-        working-directory: backend
+        working-directory: apps/api
         run: npm run test || echo "No tests yet"
 
-      - name: 📦 Install Frontend Dependencies
-        working-directory: frontend
-        run: npm install
-
       - name: 🧪 Build Frontend
-        working-directory: frontend
+        working-directory: apps/web
         run: npm run build
 
   deploy:
@@ -86,20 +81,20 @@ jobs:
       - name: 📦 Build & Push Backend Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: ./backend
-          file: ./backend/Dockerfile
+          context: ./apps/api
+          file: ./apps/api/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/t3-backend:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/t3-backend-ddd:latest
 
       - name: 📦 Build & Push Frontend Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend
-          file: ./frontend/Dockerfile
+          context: ./apps/web
+          file: ./apps/web/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/t3-frontend:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/t3-frontend-ddd:latest
 
-      # Optional Deployment (Uncomment when ready)
+      # Optional SSH Deployment
       # - name: 🚀 SSH Deploy to VPS
       #   uses: appleboy/ssh-action@v1.0.0
       #   with:

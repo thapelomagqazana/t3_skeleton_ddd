@@ -16,7 +16,7 @@
     "test:web": "npm run test --workspace=apps/web",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "db:studio": "npm --workspace=apps/api run db:studio",
-     "db:migrate": "prisma migrate dev --schema=../../packages/infrastructure/src/prisma/schema.prisma --env-file=../../.env"
+    "db:migrate": "prisma migrate dev --schema=../../packages/infrastructure/src/prisma/schema.prisma --env-file=../../.env"
   },
   "repository": {
     "type": "git",

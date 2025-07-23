@@ -10,6 +10,7 @@ env:
   DATABASE_URL: postgresql://postgres:postgres@localhost:5432/t3_skeleton_db_dd
   JWT_SECRET: dummysecretforCI
   VITE_API_URL: http://localhost:5000/api/v1
+  NODE_ENV: production
 
 jobs:
   build-test:
